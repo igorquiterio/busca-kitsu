@@ -14,6 +14,9 @@ export const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
 
+  html{
+    scroll-behavior: smooth;
+  }
 
   body{
     padding: 20px 42px 16px;

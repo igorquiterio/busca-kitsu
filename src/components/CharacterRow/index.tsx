@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import {
   CharacterDescription,
   CharacterPicture,
@@ -24,8 +25,15 @@ interface ICharacterRowProps {
 }
 
 export function CharacterRow({ character }: ICharacterRowProps) {
+  const history = useHistory();
+
+  const goToDetais = (id: number) => {
+    let path = `/detail/${id}`;
+    history.push(path);
+  };
+
   return (
-    <ListRow>
+    <ListRow onClick={() => goToDetais(character.id)}>
       <CharacterPresentation>
         {character.attributes && character.attributes.image && (
           <CharacterPicture src={character.attributes.image.original} />

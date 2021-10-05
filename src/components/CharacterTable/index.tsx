@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { CharacterRow } from '../CharacterRow';
+import { useWindowDimensions } from '../../usehooks';
 import { FaCaretLeft, FaCaretRight } from 'react-icons/fa';
 import {
   ArrowButtons,
@@ -12,7 +12,7 @@ import {
   TableFooter,
   TableHeader,
 } from './styles';
-import { useWindowDimensions } from '../../usehooks';
+import { CharacterRow } from '../CharacterRow';
 
 interface ICharacter {
   id: number;
@@ -91,11 +91,12 @@ export function CharacterTable({
             onClick={() => handleChangePage(currentPage - 1)}
           />
         </ArrowButtons>
-        {paginate.map((page) => (
+        {paginate.map((page, idx) => (
           <PageButton
             onClick={() => handleChangePage(page)}
             current={page === currentPage}
             disabled={page === currentPage}
+            key={idx}
           >
             <PageText current={page === currentPage}>{page}</PageText>
           </PageButton>

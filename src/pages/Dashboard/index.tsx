@@ -57,6 +57,7 @@ const Dashboard: React.FC = () => {
 
   function handleChangePage(page: number) {
     setPageOffset((page - 1) * 10);
+    window.scrollTo(0, 0);
   }
 
   return (

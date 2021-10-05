@@ -5,6 +5,7 @@ export const ListRow = styled.div`
   border-bottom: 1px solid #d4202620;
   line-height: 1.1;
   padding: 20px 0;
+  cursor: pointer;
 
   display: flex;
 
