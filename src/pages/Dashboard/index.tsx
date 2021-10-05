@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { CharacterTable } from '../../components/CharacterTable';
 import { Header } from '../../components/Header';
 import api from '../../services/api';
-import useDebounce from '../../usehooks';
+import { useDebounce } from '../../usehooks';
 import {
   CharacterGroup,
   CharacterLabel,
@@ -25,6 +25,7 @@ const Dashboard: React.FC = () => {
   const pageLimit = 10;
 
   const [pageOffset, setPageOffset] = useState(0);
+  const [count, setCount] = useState(0);
   const [characterName, setCharacterName] = useState('');
   const [characterList, setCharacterList] = useState<ICharacter[]>([]);
 
@@ -41,8 +42,12 @@ const Dashboard: React.FC = () => {
 
         const response = await api.get(url);
 
-        const { data: newCharacterList } = response.data;
+        const {
+          data: newCharacterList,
+          meta: { count },
+        } = response.data;
 
+        setCount(count);
         setCharacterList(newCharacterList);
       } catch (error) {}
     }
@@ -50,9 +55,9 @@ const Dashboard: React.FC = () => {
     loadCharacters();
   }, [debouncedCharacterName, pageOffset]);
 
-  useEffect(() => {
-    console.log(characterList);
-  }, [characterList]);
+  function handleChangePage(page: number) {
+    setPageOffset((page - 1) * 10);
+  }
 
   return (
     <>
@@ -73,7 +78,12 @@ const Dashboard: React.FC = () => {
         </CharacterGroup>
       </InputArea>
       {characterList.length > 0 && (
-        <CharacterTable characterList={characterList} />
+        <CharacterTable
+          characterList={characterList}
+          count={count}
+          currentPage={pageOffset / 10 + 1}
+          handleChangePage={handleChangePage}
+        />
       )}
     </>
   );

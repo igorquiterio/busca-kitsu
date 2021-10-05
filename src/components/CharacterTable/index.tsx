@@ -1,17 +1,18 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { CharacterRow } from '../CharacterRow';
+import { FaCaretLeft, FaCaretRight } from 'react-icons/fa';
 import {
-  CharacterDescription,
-  CharacterPicture,
-  CharacterPresentation,
+  ArrowButtons,
   ColumnTitle,
-  Description,
   HeaderColumn,
-  ListArea,
-  ListBody,
-  ListHeader,
-  ListRow,
-  Presentation,
+  PageButton,
+  PageText,
+  TableArea,
+  TableBody,
+  TableFooter,
+  TableHeader,
 } from './styles';
+import { useWindowDimensions } from '../../usehooks';
 
 interface ICharacter {
   id: number;
@@ -26,38 +27,86 @@ interface ICharacter {
 
 interface ICharacterTableProps {
   characterList: ICharacter[];
+  count: number;
+  currentPage: number;
+  handleChangePage: (page: number) => void;
 }
 
-export function CharacterTable({ characterList }: ICharacterTableProps) {
+export function CharacterTable({
+  characterList,
+  count,
+  currentPage,
+  handleChangePage,
+}: ICharacterTableProps) {
+  const [lastPage, setLastPage] = useState(0);
+  const [paginate, setPaginate] = useState<number[]>([]);
+  const { width } = useWindowDimensions();
+
+  useEffect(() => {
+    const _lastPage = Math.ceil(count / 10);
+    let _initialNum: number;
+    let qtdElements = 6;
+    setLastPage(_lastPage);
+
+    if (width < 720) {
+      qtdElements = 3;
+    }
+
+    if (_lastPage <= qtdElements) {
+      _initialNum = 1;
+    } else {
+      if (_lastPage - qtdElements < currentPage) {
+        _initialNum = _lastPage - (qtdElements - 1);
+      } else {
+        _initialNum = currentPage;
+      }
+    }
+
+    const _paginate = Array.from(
+      { length: qtdElements },
+      (_, i) => i + _initialNum
+    );
+    setPaginate(_paginate);
+  }, [count, currentPage, width]);
+
   return (
-    <ListArea>
-      <ListHeader>
+    <TableArea>
+      <TableHeader>
         <HeaderColumn percentage={25}>
           <ColumnTitle>Personagem</ColumnTitle>
         </HeaderColumn>
         <HeaderColumn percentage={75}>
           <ColumnTitle>Descrição</ColumnTitle>
         </HeaderColumn>
-      </ListHeader>
-      <ListBody>
+      </TableHeader>
+      <TableBody>
         {characterList.map((character) => (
-          <ListRow>
-            <CharacterPresentation>
-              {character.attributes && character.attributes.image && (
-                <CharacterPicture src={character.attributes.image.original} />
-              )}
-              <Presentation>
-                {character.attributes && character.attributes.canonicalName}
-              </Presentation>
-            </CharacterPresentation>
-            <CharacterDescription>
-              <Description>
-                {character.attributes && character.attributes.description}
-              </Description>
-            </CharacterDescription>
-          </ListRow>
+          <CharacterRow key={character.id} character={character} />
         ))}
-      </ListBody>
-    </ListArea>
+      </TableBody>
+      <TableFooter>
+        <ArrowButtons disabled={currentPage === 1}>
+          <FaCaretLeft
+            size={24}
+            onClick={() => handleChangePage(currentPage - 1)}
+          />
+        </ArrowButtons>
+        {paginate.map((page) => (
+          <PageButton
+            onClick={() => handleChangePage(page)}
+            current={page === currentPage}
+            disabled={page === currentPage}
+          >
+            <PageText current={page === currentPage}>{page}</PageText>
+          </PageButton>
+        ))}
+        <ArrowButtons disabled={currentPage === lastPage}>
+          <FaCaretRight
+            size={24}
+            onClick={() => handleChangePage(currentPage + 1)}
+          />
+        </ArrowButtons>
+      </TableFooter>
+    </TableArea>
   );
 }

@@ -3,13 +3,16 @@ import styled, { css } from 'styled-components';
 interface IHeaderColumnProps {
   percentage: number;
 }
+interface IPageTextProps {
+  current: boolean;
+}
 
-export const ListArea = styled.div`
+export const TableArea = styled.div`
   display: flex;
   flex-direction: column;
 `;
 
-export const ListHeader = styled.div`
+export const TableHeader = styled.div`
   display: flex;
   flex-direction: row;
 `;
@@ -46,78 +49,66 @@ export const ColumnTitle = styled.span`
   font-size: 1rem;
 `;
 
-export const ListBody = styled.div`
+export const TableBody = styled.div`
   display: flex;
   flex-direction: column;
+
+  margin-bottom: 16px;
 `;
 
-export const ListRow = styled.div`
-  height: 112px;
-  border-bottom: 1px solid #d4202620;
-  line-height: 1.1;
-  padding: 20px 0;
-
+export const TableFooter = styled.div`
   display: flex;
-
-  &:hover {
-    background: #d4202610;
-  }
-
-  @media (max-width: 720px) {
-    padding-left: 5px;
-  }
-`;
-
-export const CharacterPresentation = styled.div`
-  display: flex;
+  justify-content: center;
   align-items: center;
-  width: 25%;
-
-  @media (max-width: 720px) {
-    width: 100%;
-  }
+  max-height: 50px;
 `;
 
-export const CharacterPicture = styled.img`
-  width: 58px;
-  min-width: 58px;
-  height: 58px;
-  margin-left: 10px;
-  margin-right: 10px;
+export const PageButton = styled.button<IPageTextProps>`
+  min-width: 32px;
+  min-height: 32px;
+  position: relative;
 
+  background: var(--background);
+  border: 1px solid var(--primary);
   border-radius: 50%;
-  object-fit: cover;
-  object-position: 50% 10%;
+
+  & + & {
+    margin-left: 20px;
+  }
+
+  ${(props) =>
+    props.current &&
+    css`
+      background: var(--primary);
+      &:disabled {
+        opacity: 1;
+        cursor: auto;
+      }
+    `}
 `;
 
-export const Presentation = styled.span`
-  color: var(--text);
+export const PageText = styled.span<IPageTextProps>`
+  color: var(--primary);
   font-size: 1rem;
-
-  text-overflow: ellipsis;
-  overflow: hidden;
-  word-wrap: break-word;
+  ${(props) =>
+    props.current &&
+    css`
+      color: var(--background);
+    `}
 `;
 
-export const CharacterDescription = styled.div`
-  width: 75%;
-  max-height: 112px;
-  margin-left: 10px;
+export const ArrowButtons = styled.button`
+  border: 0px;
+  background: var(--background);
+  color: var(--primary);
 
-  display: -webkit-box;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  margin: 0 12px;
 
   @media (max-width: 720px) {
-    display: none;
+    margin: 0 60px;
   }
-`;
-
-export const Description = styled.span`
-  color: var(--text);
-  font-size: 1rem;
-
-  overflow: hidden;
 `;
