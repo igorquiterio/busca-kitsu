@@ -16,10 +16,17 @@ export const GlobalStyle = createGlobalStyle`
 
 
   body{
-    margin: 20px 42px 16px;
+    padding: 20px 42px 16px;
    
     background: var(--background);
     -webkit-font-smoothing: antialised; 
+    
+    border-bottom: 10px solid #d42026;
+    min-height: 100vh;
+
+    @media (max-width: 720px){
+      padding: 12px 0 24px;
+    }
   }
 
   body, input, textarea, button {

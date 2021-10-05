@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { CharacterTable } from '../../components/CharacterTable';
 import { Header } from '../../components/Header';
 import api from '../../services/api';
 import useDebounce from '../../usehooks';
@@ -7,20 +8,9 @@ import {
   CharacterLabel,
   CharacterInput,
   InputArea,
-  ListArea,
-  ListHeader,
-  HeaderColumn,
-  ColumnTitle,
-  ListBody,
-  ListRow,
-  CharacterPresentation,
-  CharacterDescription,
-  Presentation,
-  Description,
-  CharacterPicture,
 } from './styles';
 
-interface Character {
+interface ICharacter {
   id: number;
   attributes: {
     canonicalName: string;
@@ -36,7 +26,7 @@ const Dashboard: React.FC = () => {
 
   const [pageOffset, setPageOffset] = useState(0);
   const [characterName, setCharacterName] = useState('');
-  const [characterList, setCharacterList] = useState<Character[]>([]);
+  const [characterList, setCharacterList] = useState<ICharacter[]>([]);
 
   const debouncedCharacterName = useDebounce<string>(characterName, 400);
 
@@ -82,35 +72,9 @@ const Dashboard: React.FC = () => {
           />
         </CharacterGroup>
       </InputArea>
-      <ListArea>
-        <ListHeader>
-          <HeaderColumn percentage={25}>
-            <ColumnTitle>Personagem</ColumnTitle>
-          </HeaderColumn>
-          <HeaderColumn percentage={75}>
-            <ColumnTitle>Descrição</ColumnTitle>
-          </HeaderColumn>
-        </ListHeader>
-        <ListBody>
-          {characterList.map((character) => (
-            <ListRow>
-              <CharacterPresentation>
-                {character.attributes.image && (
-                  <CharacterPicture src={character.attributes.image.original} />
-                )}
-                <Presentation>
-                  {character.attributes && character.attributes.canonicalName}
-                </Presentation>
-              </CharacterPresentation>
-              <CharacterDescription>
-                <Description>
-                  {character.attributes && character.attributes.description}
-                </Description>
-              </CharacterDescription>
-            </ListRow>
-          ))}
-        </ListBody>
-      </ListArea>
+      {characterList.length > 0 && (
+        <CharacterTable characterList={characterList} />
+      )}
     </>
   );
 };
