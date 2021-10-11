@@ -8,6 +8,8 @@ import {
   CharacterLabel,
   CharacterInput,
   InputArea,
+  Loading,
+  LoadBox,
 } from './styles';
 
 interface ICharacter {
@@ -28,6 +30,7 @@ const Dashboard: React.FC = () => {
   const [count, setCount] = useState(0);
   const [characterName, setCharacterName] = useState('');
   const [characterList, setCharacterList] = useState<ICharacter[]>([]);
+  const [loadingList, setLoadingList] = useState(true);
 
   const debouncedCharacterName = useDebounce<string>(characterName, 400);
 
@@ -41,7 +44,7 @@ const Dashboard: React.FC = () => {
             : '');
 
         const response = await api.get(url);
-
+        setLoadingList(false);
         const {
           data: newCharacterList,
           meta: { count },
@@ -49,9 +52,12 @@ const Dashboard: React.FC = () => {
 
         setCount(count);
         setCharacterList(newCharacterList);
-      } catch (error) {}
+      } catch (error) {
+        console.error(error);
+        setLoadingList(false);
+      }
     }
-
+    setLoadingList(true);
     loadCharacters();
   }, [debouncedCharacterName, pageOffset]);
 
@@ -68,14 +74,17 @@ const Dashboard: React.FC = () => {
           <CharacterLabel htmlFor='character'>
             Nome do Personagem
           </CharacterLabel>
-          <CharacterInput
-            id='character'
-            value={characterName}
-            onChange={(e) => {
-              setCharacterName(e.target.value);
-              setPageOffset(0);
-            }}
-          />
+          <LoadBox>
+            <CharacterInput
+              id='character'
+              value={characterName}
+              onChange={(e) => {
+                setCharacterName(e.target.value);
+                setPageOffset(0);
+              }}
+            />
+            {loadingList && <Loading />}
+          </LoadBox>
         </CharacterGroup>
       </InputArea>
       {characterList.length > 0 && (

@@ -54,6 +54,7 @@ export function CharacterTable({
 
     if (_lastPage <= qtdElements) {
       _initialNum = 1;
+      qtdElements = _lastPage;
     } else {
       if (_lastPage - qtdElements < currentPage) {
         _initialNum = _lastPage - (qtdElements - 1);
@@ -86,10 +87,7 @@ export function CharacterTable({
       </TableBody>
       <TableFooter>
         <ArrowButtons disabled={currentPage === 1}>
-          <FaCaretLeft
-            size={24}
-            onClick={() => handleChangePage(currentPage - 1)}
-          />
+          <FaCaretLeft size={24} onClick={() => handleChangePage(1)} />
         </ArrowButtons>
         {paginate.map((page, idx) => (
           <PageButton
@@ -102,10 +100,7 @@ export function CharacterTable({
           </PageButton>
         ))}
         <ArrowButtons disabled={currentPage === lastPage}>
-          <FaCaretRight
-            size={24}
-            onClick={() => handleChangePage(currentPage + 1)}
-          />
+          <FaCaretRight size={24} onClick={() => handleChangePage(lastPage)} />
         </ArrowButtons>
       </TableFooter>
     </TableArea>

@@ -5,6 +5,7 @@ export const Container = styled.header`
   justify-content: space-between;
   color: var(--primary);
   margin-bottom: 34px;
+  width: 100%;
 
   @media (max-width: 720px) {
     padding: 0px 42px;

@@ -90,6 +90,12 @@ export const PageButton = styled.button<IPageTextProps>`
 export const PageText = styled.span<IPageTextProps>`
   color: var(--primary);
   font-size: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  padding-top: 25%;
+  padding-bottom: 25%;
   ${(props) =>
     props.current &&
     css`

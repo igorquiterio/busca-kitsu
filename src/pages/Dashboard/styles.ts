@@ -1,4 +1,5 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
+import { FaCircleNotch } from 'react-icons/fa';
 
 export const CharacterGroup = styled.div`
   display: flex;
@@ -29,4 +30,30 @@ export const InputArea = styled.div`
     padding: 0px 42px;
     margin-bottom: 12px;
   }
+`;
+
+const rotate = keyframes`
+ from {
+    -webkit-transform: rotate(0deg);
+    }
+to {
+    -webkit-transform: rotate(359deg);
+}
+`;
+
+export const LoadBox = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+export const Loading = styled(FaCircleNotch)`
+  width: 20px;
+  height: 20px;
+  color: var(--primary);
+
+  margin-left: 10px;
+
+  animation-name: ${rotate};
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
 `;
